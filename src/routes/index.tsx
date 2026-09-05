@@ -292,6 +292,18 @@ function Index() {
         )}
 
         {engineer && !loading && <EngineerSheet engineer={engineer} />}
+
+        <ReferenceRanks onPick={setInput} onSummon={(username) => {
+          setInput(username);
+          // Programmatically submit after state update by calling analyze directly.
+          setLoading(true);
+          setError(null);
+          setEngineer(null);
+          analyze(username)
+            .then(setEngineer)
+            .catch((err) => setError(err instanceof Error ? err.message : "The System failed to answer."))
+            .finally(() => setLoading(false));
+        }} />
       </main>
     </div>
   );
@@ -376,3 +388,53 @@ function EngineerSheet({ engineer }: { engineer: EngineerStats }) {
     </div>
   );
 }
+
+const REFERENCE_EXAMPLES: { rank: Rank; username: string; note: string }[] = [
+  { rank: "S", username: "torvalds", note: "Creator of Linux — a National Level Engineer." },
+  { rank: "A", username: "sindresorhus", note: "Prolific open-source author — Elite tier." },
+  { rank: "D", username: "octocat", note: "The classic starter profile — still rising." },
+];
+
+function ReferenceRanks({ onPick, onSummon }: { onPick: (username: string) => void; onSummon: (username: string) => void }) {
+  return (
+    <section className="animate-float-up mt-16 w-full max-w-4xl">
+      <div className="rune-divider mb-6 w-full" />
+      <h3 className="font-display text-center text-sm font-bold tracking-[0.4em] text-mana uppercase">
+        — Rank Reference —
+      </h3>
+      <p className="mt-2 text-center text-sm text-muted-foreground">
+        Sample engineers the System has already scouted.
+      </p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        {REFERENCE_EXAMPLES.map((ex) => {
+          const meta = RANK_META[ex.rank];
+          return (
+            <div
+              key={ex.username}
+              className="system-window relative flex flex-col items-center rounded-2xl p-5 text-center transition-all hover:shadow-[0_0_28px_var(--color-mana-glow)]"
+            >
+              <span
+                className={`font-display rank-glow text-5xl font-black ${meta.colorClass}`}
+              >
+                {ex.rank}
+              </span>
+              <span className="mt-1 text-xs tracking-widest text-muted-foreground uppercase">
+                {meta.title}
+              </span>
+              <p className="mt-3 text-lg font-semibold text-foreground">@{ex.username}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{ex.note}</p>
+              <button
+                type="button"
+                onClick={() => onSummon(ex.username)}
+                className="mt-5 w-full rounded-lg border border-mana/40 bg-mana/10 px-4 py-2 text-sm font-semibold tracking-wide text-mana transition-all hover:bg-mana/20 hover:shadow-[0_0_16px_var(--color-mana-glow)]"
+              >
+                Judge this engineer
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
