@@ -145,17 +145,26 @@ async function analyze(username: string): Promise<EngineerStats> {
 
   const [repos, commits, prs, issues, reviews] = await Promise.all([
     gh<GhRepo[]>(`/users/${user.login}/repos?per_page=100&sort=pushed`).catch(() => [] as GhRepo[]),
-    gh<GhSearch>(`/search/commits?q=author:${user.login}&per_page=1`).catch(() => ({ total_count: 0 })),
-    gh<GhSearch>(`/search/issues?q=type:pr+author:${user.login}&per_page=1`).catch(() => ({ total_count: 0 })),
-    gh<GhSearch>(`/search/issues?q=type:issue+author:${user.login}&per_page=1`).catch(() => ({ total_count: 0 })),
-    gh<GhSearch>(`/search/issues?q=type:pr+reviewed-by:${user.login}&per_page=1`).catch(() => ({ total_count: 0 })),
+    gh<GhSearch>(`/search/commits?q=author:${user.login}&per_page=1`).catch(() => ({
+      total_count: 0,
+    })),
+    gh<GhSearch>(`/search/issues?q=type:pr+author:${user.login}&per_page=1`).catch(() => ({
+      total_count: 0,
+    })),
+    gh<GhSearch>(`/search/issues?q=type:issue+author:${user.login}&per_page=1`).catch(() => ({
+      total_count: 0,
+    })),
+    gh<GhSearch>(`/search/issues?q=type:pr+reviewed-by:${user.login}&per_page=1`).catch(() => ({
+      total_count: 0,
+    })),
   ]);
 
   const ownRepos = repos.filter((r) => !r.fork);
   const stars = ownRepos.reduce((s, r) => s + r.stargazers_count, 0);
   const topRepo = ownRepos.reduce((m, r) => Math.max(m, r.stargazers_count), 0);
   const languages = new Set(repos.map((r) => r.language).filter(Boolean)).size;
-  const contributions = commits.total_count + prs.total_count + issues.total_count + reviews.total_count;
+  const contributions =
+    commits.total_count + prs.total_count + issues.total_count + reviews.total_count;
 
   const raw: Record<string, number> = {
     commits: commits.total_count,
@@ -245,8 +254,8 @@ function Index() {
           </p>
           <h1 className="font-display mana-text mt-4 text-5xl font-bold sm:text-7xl">GITRANK</h1>
           <p className="mt-3 max-w-md text-lg text-muted-foreground">
-            Enter a GitHub username. The System will measure their power and assign an engineer rank —{" "}
-            <span className="text-rank-e font-semibold">E</span> to{" "}
+            Enter a GitHub username. The System will measure their power and assign an engineer rank
+            — <span className="text-rank-e font-semibold">E</span> to{" "}
             <span className="text-rank-s font-semibold">S</span>.
           </p>
         </div>
@@ -285,24 +294,31 @@ function Index() {
 
         {error && !loading && (
           <div className="system-window animate-float-up mt-10 w-full max-w-xl rounded-xl border-destructive/50 px-8 py-6 text-center">
-            <p className="font-display text-sm tracking-[0.3em] text-destructive uppercase">System Error</p>
+            <p className="font-display text-sm tracking-[0.3em] text-destructive uppercase">
+              System Error
+            </p>
             <p className="mt-2 text-muted-foreground">{error}</p>
           </div>
         )}
 
         {engineer && !loading && <EngineerSheet engineer={engineer} />}
 
-        <ReferenceRanks onPick={setInput} onSummon={(username) => {
-          setInput(username);
-          // Programmatically submit after state update by calling analyze directly.
-          setLoading(true);
-          setError(null);
-          setEngineer(null);
-          analyze(username)
-            .then(setEngineer)
-            .catch((err) => setError(err instanceof Error ? err.message : "The System failed to answer."))
-            .finally(() => setLoading(false));
-        }} />
+        <ReferenceRanks
+          onPick={setInput}
+          onSummon={(username) => {
+            setInput(username);
+            // Programmatically submit after state update by calling analyze directly.
+            setLoading(true);
+            setError(null);
+            setEngineer(null);
+            analyze(username)
+              .then(setEngineer)
+              .catch((err) =>
+                setError(err instanceof Error ? err.message : "The System failed to answer."),
+              )
+              .finally(() => setLoading(false));
+          }}
+        />
       </main>
     </div>
   );
@@ -313,77 +329,93 @@ function EngineerSheet({ engineer }: { engineer: EngineerStats }) {
 
   return (
     <div className="animate-float-up mt-12 w-full">
-      {/* Rank window */}
-      <section className="system-window overflow-hidden rounded-2xl">
-        <div className="system-header px-6 py-3 text-center">
-          <span className="font-display text-xs font-bold tracking-[0.4em] text-mana uppercase">
-            — Engineer Status Window —
-          </span>
-        </div>
-        <div className="flex flex-col items-center gap-8 p-8 sm:flex-row sm:p-10">
-          <div className="relative shrink-0">
-            <div className="absolute -inset-3 rounded-full bg-mana/20 blur-2xl" />
-            <img
-              src={engineer.avatar}
-              alt={`${engineer.username}'s avatar`}
-              width={140}
-              height={140}
-              className="relative h-32 w-32 rounded-full border-2 border-mana/60 object-cover shadow-[0_0_30px_var(--color-mana-glow)]"
-            />
-          </div>
-
-          <div className="flex-1 text-center sm:text-left">
-            <p className="font-display text-xs tracking-[0.35em] text-muted-foreground uppercase">Name</p>
-            <h2 className="mt-1 text-3xl font-bold tracking-wide text-foreground sm:text-4xl">
-              {engineer.name ?? engineer.username}
-            </h2>
-            <p className="text-mana text-lg font-semibold">@{engineer.username}</p>
-            {engineer.bio && <p className="mt-2 max-w-md text-muted-foreground">{engineer.bio}</p>}
-            <p className="mt-3 text-sm text-muted-foreground">
-              {engineer.publicRepos} public repositories · {meta.desc}
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <span className={`font-display rank-glow text-[7rem] leading-none font-black ${meta.colorClass}`}>
-              {engineer.rank}
+      <div className="notification-shell profile-shell">
+        <section className="system-window profile-window overflow-hidden rounded-2xl">
+          <div className="system-header px-6 py-3 text-center">
+            <span className="font-display text-xs font-bold tracking-[0.4em] text-mana uppercase">
+              — Engineer Status Window —
             </span>
-            <span className="font-display mt-1 text-xs tracking-[0.3em] text-muted-foreground uppercase">
-              Rank
-            </span>
-            <div className="rune-divider my-3 w-24" />
-            <span className="text-3xl font-bold text-foreground">{engineer.overall}</span>
-            <span className="text-xs tracking-widest text-muted-foreground uppercase">Level</span>
-            <span className={`mt-2 text-sm font-semibold ${meta.colorClass}`}>{engineer.title}</span>
           </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="system-window mt-6 rounded-2xl p-6 sm:p-8">
-        <h3 className="font-display text-center text-sm font-bold tracking-[0.4em] text-mana uppercase">
-          — Scouting Metrics —
-        </h3>
-        <div className="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2">
-          {engineer.metrics.map((m, i) => (
-            <div key={m.key} className="animate-float-up" style={{ animationDelay: `${i * 60}ms` }}>
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="font-semibold tracking-wide text-foreground">{m.label}</span>
-                <span className="text-sm text-muted-foreground">
-                  {formatNum(m.raw)} {m.unit}{" "}
-                  <span className="ml-1 font-bold text-mana">{m.score}</span>
-                </span>
-              </div>
-              <div className="stat-bar-track mt-1.5 h-2 overflow-hidden rounded-full">
-                <div className="stat-bar-fill h-full rounded-full" style={{ width: `${m.score}%` }} />
-              </div>
+          <div className="flex flex-col items-center gap-8 p-8 sm:flex-row sm:p-10">
+            <div className="relative shrink-0">
+              <div className="absolute -inset-3 rounded-full bg-mana/20 blur-2xl" />
+              <img
+                src={engineer.avatar}
+                alt={`${engineer.username}'s avatar`}
+                width={140}
+                height={140}
+                className="relative h-32 w-32 rounded-full border-2 border-mana/60 object-cover shadow-[0_0_30px_var(--color-mana-glow)]"
+              />
             </div>
-          ))}
-        </div>
-        <p className="mt-8 text-center text-xs text-muted-foreground/70">
-          Scores are measured by the System from public GitHub activity and scaled against legendary engineers.
-        </p>
-      </section>
+
+            <div className="flex-1 text-center sm:text-left">
+              <p className="font-display text-xs tracking-[0.35em] text-muted-foreground uppercase">
+                Name
+              </p>
+              <h2 className="mt-1 text-3xl font-bold tracking-wide text-foreground sm:text-4xl">
+                {engineer.name ?? engineer.username}
+              </h2>
+              <p className="text-mana text-lg font-semibold">@{engineer.username}</p>
+              {engineer.bio && (
+                <p className="mt-2 max-w-md text-muted-foreground">{engineer.bio}</p>
+              )}
+              <p className="mt-3 text-sm text-muted-foreground">
+                {engineer.publicRepos} public repositories · {meta.desc}
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center">
+              <span
+                className={`font-display rank-glow text-[7rem] leading-none font-black ${meta.colorClass}`}
+              >
+                {engineer.rank}
+              </span>
+              <span className="font-display mt-1 text-xs tracking-[0.3em] text-muted-foreground uppercase">
+                Rank
+              </span>
+              <div className="rune-divider my-3 w-24" />
+              <span className="text-3xl font-bold text-foreground">{engineer.overall}</span>
+              <span className="text-xs tracking-widest text-muted-foreground uppercase">Level</span>
+              <span className={`mt-2 text-sm font-semibold ${meta.colorClass}`}>
+                {engineer.title}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section className="system-window profile-stats mt-6 rounded-2xl p-6 sm:p-8">
+          <h3 className="font-display text-center text-sm font-bold tracking-[0.4em] text-mana uppercase">
+            — Scouting Metrics —
+          </h3>
+          <div className="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2">
+            {engineer.metrics.map((m, i) => (
+              <div
+                key={m.key}
+                className="animate-float-up"
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="font-semibold tracking-wide text-foreground">{m.label}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {formatNum(m.raw)} {m.unit}{" "}
+                    <span className="ml-1 font-bold text-mana">{m.score}</span>
+                  </span>
+                </div>
+                <div className="stat-bar-track mt-1.5 h-2 overflow-hidden rounded-full">
+                  <div
+                    className="stat-bar-fill h-full rounded-full"
+                    style={{ width: `${m.score}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-xs text-muted-foreground/70">
+            Scores are measured by the System from public GitHub activity and scaled against
+            legendary engineers.
+          </p>
+        </section>
+      </div>
     </div>
   );
 }
@@ -394,46 +426,51 @@ const REFERENCE_EXAMPLES: { rank: Rank; username: string; note: string }[] = [
   { rank: "D", username: "octocat", note: "The classic starter profile — still rising." },
 ];
 
-function ReferenceRanks({ onPick, onSummon }: { onPick: (username: string) => void; onSummon: (username: string) => void }) {
+function ReferenceRanks({ onSummon }: { onSummon: (username: string) => void }) {
   return (
-    <section className="animate-float-up mt-16 w-full max-w-4xl">
-      <div className="rune-divider mb-6 w-full" />
-      <h3 className="font-display text-center text-sm font-bold tracking-[0.4em] text-mana uppercase">
-        — Rank Reference —
-      </h3>
-      <p className="mt-2 text-center text-sm text-muted-foreground">
-        Sample engineers the System has already scouted.
-      </p>
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        {REFERENCE_EXAMPLES.map((ex) => {
-          const meta = RANK_META[ex.rank];
-          return (
-            <div
-              key={ex.username}
-              className="system-window relative flex flex-col items-center rounded-2xl p-5 text-center transition-all hover:shadow-[0_0_28px_var(--color-mana-glow)]"
-            >
-              <span
-                className={`font-display rank-glow text-5xl font-black ${meta.colorClass}`}
-              >
-                {ex.rank}
-              </span>
-              <span className="mt-1 text-xs tracking-widest text-muted-foreground uppercase">
-                {meta.title}
-              </span>
-              <p className="mt-3 text-lg font-semibold text-foreground">@{ex.username}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{ex.note}</p>
-              <button
-                type="button"
-                onClick={() => onSummon(ex.username)}
-                className="mt-5 w-full rounded-lg border border-mana/40 bg-mana/10 px-4 py-2 text-sm font-semibold tracking-wide text-mana transition-all hover:bg-mana/20 hover:shadow-[0_0_16px_var(--color-mana-glow)]"
-              >
-                Judge this engineer
-              </button>
+    <section className="animate-float-up mt-12 w-full max-w-3xl">
+      <div className="notification-shell">
+        <span className="notification-side notification-side-left" aria-hidden="true" />
+        <span className="notification-side notification-side-right" aria-hidden="true" />
+        <div className="system-notification overflow-hidden">
+          <div className="notification-topline" />
+          <div className="notification-frame">
+            <div className="notification-rail">
+              <span className="notification-icon">!</span>
+              <span className="notification-label">Notification</span>
             </div>
-          );
-        })}
+            <div className="notification-content">
+              <p className="notification-kicker">The System has issued a new message</p>
+              <h3 className="notification-title">Your rank references have been finalized.</h3>
+              <p className="notification-copy">
+                Three engineers have been selected as known targets. Inspect one to begin a new
+                evaluation.
+              </p>
+              <div className="notification-targets">
+                {REFERENCE_EXAMPLES.map((ex) => {
+                  const meta = RANK_META[ex.rank];
+                  return (
+                    <button
+                      key={ex.username}
+                      type="button"
+                      onClick={() => onSummon(ex.username)}
+                      className="notification-entry group"
+                    >
+                      <span className={`notification-rank ${meta.colorClass}`}>{ex.rank}</span>
+                      <span className="notification-target-info">
+                        <span className="notification-target-name">@{ex.username}</span>
+                        <span className={`notification-target-title ${meta.colorClass}`}>
+                          {meta.title}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-

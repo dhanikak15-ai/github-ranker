@@ -57,9 +57,9 @@
   --popover-foreground: oklch(0.96 0.01 260);
   --primary: oklch(0.58 0.22 240);
   --primary-foreground: oklch(0.98 0.01 240);
-  --secondary: oklch(0.20 0.06 260);
+  --secondary: oklch(0.2 0.06 260);
   --secondary-foreground: oklch(0.96 0.01 260);
-  --muted: oklch(0.20 0.05 260);
+  --muted: oklch(0.2 0.05 260);
   --muted-foreground: oklch(0.65 0.05 260);
   --accent: oklch(0.65 0.18 220);
   --accent-foreground: oklch(0.98 0.01 260);
@@ -67,15 +67,15 @@
   --destructive-foreground: oklch(0.98 0.01 260);
   --border: oklch(0.28 0.08 260);
   --input: oklch(0.25 0.07 260);
-  --ring: oklch(0.65 0.20 240);
+  --ring: oklch(0.65 0.2 240);
 
   --mana: oklch(0.72 0.18 220);
   --mana-glow: oklch(0.78 0.16 220 / 60%);
 
   --rank-s: oklch(0.82 0.16 95);
   --rank-a: oklch(0.65 0.22 25);
-  --rank-b: oklch(0.60 0.22 240);
-  --rank-c: oklch(0.60 0.18 180);
+  --rank-b: oklch(0.6 0.22 240);
+  --rank-c: oklch(0.6 0.18 180);
   --rank-d: oklch(0.62 0.15 160);
   --rank-e: oklch(0.55 0.03 260);
 }
@@ -97,7 +97,12 @@
     letter-spacing: 0.08em;
   }
   .mana-text {
-    background: linear-gradient(135deg, oklch(0.85 0.10 220), oklch(0.60 0.24 240), oklch(0.75 0.16 260));
+    background: linear-gradient(
+      135deg,
+      oklch(0.85 0.1 220),
+      oklch(0.6 0.24 240),
+      oklch(0.75 0.16 260)
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -106,26 +111,377 @@
     filter: drop-shadow(0 0 18px currentColor) drop-shadow(0 0 60px currentColor);
   }
   .system-window {
-    background:
-      linear-gradient(180deg, oklch(0.18 0.06 255 / 92%), oklch(0.13 0.05 255 / 95%));
+    background: linear-gradient(180deg, oklch(0.18 0.06 255 / 92%), oklch(0.13 0.05 255 / 95%));
     border: 1px solid oklch(0.55 0.15 240 / 55%);
     box-shadow:
-      0 0 0 1px oklch(0.10 0.04 260 / 80%),
-      0 0 24px oklch(0.50 0.18 240 / 30%),
-      inset 0 1px 0 oklch(0.70 0.14 240 / 25%);
+      0 0 0 1px oklch(0.1 0.04 260 / 80%),
+      0 0 24px oklch(0.5 0.18 240 / 30%),
+      inset 0 1px 0 oklch(0.7 0.14 240 / 25%);
     backdrop-filter: blur(10px);
   }
   .system-header {
-    background: linear-gradient(90deg, transparent, oklch(0.55 0.20 240 / 30%), transparent);
-    border-bottom: 1px solid oklch(0.50 0.14 240 / 45%);
+    background: linear-gradient(90deg, transparent, oklch(0.55 0.2 240 / 30%), transparent);
+    border-bottom: 1px solid oklch(0.5 0.14 240 / 45%);
+  }
+  .system-notification {
+    position: relative;
+    margin: 0 3rem;
+    background:
+      radial-gradient(ellipse at 50% 35%, oklch(0.25 0.13 235 / 24%), transparent 62%),
+      repeating-linear-gradient(
+        112deg,
+        transparent 0 22px,
+        oklch(0.4 0.14 230 / 8%) 22px 23px,
+        transparent 23px 47px
+      ),
+      repeating-linear-gradient(
+        28deg,
+        transparent 0 35px,
+        oklch(0.3 0.16 220 / 7%) 35px 36px,
+        transparent 36px 72px
+      ),
+      linear-gradient(135deg, oklch(0.16 0.06 250 / 97%), oklch(0.1 0.05 255 / 98%));
+    border: 1px solid oklch(0.9 0.09 220 / 88%);
+    box-shadow:
+      0 0 0 1px oklch(0.72 0.16 220 / 70%),
+      0 0 12px oklch(0.7 0.18 220 / 55%),
+      0 16px 45px oklch(0.04 0.03 260 / 45%),
+      inset 0 1px 0 oklch(0.98 0.08 220 / 75%);
+    backdrop-filter: blur(14px);
+  }
+  .notification-topline {
+    display: none;
+  }
+  .notification-shell {
+    position: relative;
+    padding: 3rem 0;
+    border-right: 2px solid oklch(0.82 0.18 220 / 88%);
+    border-left: 2px solid oklch(0.82 0.18 220 / 88%);
+    background:
+      linear-gradient(
+        90deg,
+        oklch(0.25 0.1 230 / 22%),
+        transparent 12%,
+        transparent 88%,
+        oklch(0.25 0.1 230 / 22%)
+      ),
+      linear-gradient(180deg, transparent, oklch(0.18 0.08 240 / 20%), transparent),
+      repeating-linear-gradient(
+        165deg,
+        transparent 0 28px,
+        oklch(0.3 0.16 230 / 10%) 28px 29px,
+        transparent 29px 60px
+      );
+    box-shadow:
+      inset 12px 0 20px oklch(0.08 0.08 240 / 25%),
+      inset -12px 0 20px oklch(0.08 0.08 240 / 25%),
+      0 0 18px oklch(0.52 0.18 220 / 28%);
+  }
+  .notification-shell::before,
+  .notification-shell::after {
+    position: absolute;
+    right: -1.5rem;
+    left: -1.5rem;
+    height: 0.82rem;
+    background: linear-gradient(
+      90deg,
+      oklch(0.35 0.2 220 / 70%),
+      oklch(0.78 0.22 220) 10%,
+      oklch(1 0.05 220) 50%,
+      oklch(0.78 0.22 220) 90%,
+      oklch(0.35 0.2 220 / 70%)
+    );
+    clip-path: polygon(
+      0 25%,
+      3% 25%,
+      5% 0,
+      95% 0,
+      97% 25%,
+      100% 25%,
+      100% 75%,
+      97% 75%,
+      95% 100%,
+      5% 100%,
+      3% 75%,
+      0 75%
+    );
+    box-shadow:
+      0 0 8px oklch(0.9 0.15 220 / 90%),
+      0 0 22px var(--color-mana-glow),
+      0 0 42px oklch(0.45 0.18 220 / 75%);
+    content: "";
+  }
+  .notification-shell::before {
+    top: 0.25rem;
+  }
+  .notification-shell::after {
+    bottom: 0.25rem;
+    clip-path: polygon(
+      0 75%,
+      3% 75%,
+      5% 100%,
+      95% 100%,
+      97% 75%,
+      100% 75%,
+      100% 25%,
+      97% 25%,
+      95% 0,
+      5% 0,
+      3% 25%,
+      0 25%
+    );
+  }
+  .notification-shell::before {
+    clip-path: polygon(
+      0 25%,
+      3% 25%,
+      5% 0,
+      95% 0,
+      97% 25%,
+      100% 25%,
+      100% 75%,
+      97% 75%,
+      95% 100%,
+      5% 100%,
+      3% 75%,
+      0 75%
+    );
+  }
+  .notification-side {
+    position: absolute;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 0;
+    width: 3px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      oklch(0.95 0.13 220 / 95%) 10%,
+      oklch(0.45 0.2 220 / 55%) 25%,
+      oklch(0.92 0.15 220 / 90%) 50%,
+      oklch(0.45 0.2 220 / 55%) 75%,
+      oklch(0.95 0.13 220 / 95%) 90%,
+      transparent
+    );
+    box-shadow: 0 0 10px oklch(0.55 0.2 220 / 80%);
+  }
+  .notification-side::after {
+    position: absolute;
+    top: 12%;
+    width: 1.2rem;
+    height: 1px;
+    background: oklch(0.85 0.16 220 / 80%);
+    box-shadow: 0 0 8px var(--color-mana-glow);
+    content: "";
+  }
+  .notification-side-left {
+    left: 0.85rem;
+  }
+  .notification-side-left::after {
+    left: 0;
+    transform: rotate(28deg);
+    transform-origin: left;
+  }
+  .notification-side-right {
+    right: 0.85rem;
+  }
+  .notification-side-right::after {
+    right: 0;
+    transform: rotate(-28deg);
+    transform-origin: right;
+  }
+  .profile-shell {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+  .profile-window,
+  .profile-stats {
+    margin-right: 2rem;
+    margin-left: 2rem;
+    border-color: oklch(0.72 0.16 220 / 70%);
+    box-shadow:
+      0 0 0 1px oklch(0.52 0.16 220 / 35%),
+      0 0 20px oklch(0.52 0.18 220 / 25%),
+      inset 0 1px 0 oklch(0.88 0.12 220 / 45%);
+  }
+  .notification-frame {
+    min-height: 18rem;
+    padding: 1.7rem clamp(1rem, 6vw, 3.25rem) 1.7rem;
+  }
+  .notification-rail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+  .notification-icon {
+    display: grid;
+    width: 1.9rem;
+    height: 1.9rem;
+    place-items: center;
+    border: 1px solid oklch(0.85 0.08 220 / 70%);
+    border-radius: 999px;
+    color: oklch(0.92 0.05 220);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1;
+    box-shadow:
+      0 0 16px var(--color-mana-glow),
+      inset 0 0 12px oklch(0.7 0.18 220 / 20%);
+  }
+  .notification-label {
+    color: oklch(0.88 0.06 220);
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-shadow: 0 0 12px var(--color-mana-glow);
+  }
+  .notification-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem 0 0;
+    background: linear-gradient(110deg, oklch(0.24 0.08 240 / 10%), transparent 55%);
+    text-align: center;
+  }
+  .notification-kicker {
+    color: var(--color-mana);
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+  }
+  .notification-title {
+    max-width: 27rem;
+    margin-top: 0.55rem;
+    color: oklch(0.97 0.02 220);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+    text-shadow: 0 0 22px oklch(0.72 0.16 220 / 30%);
+    text-transform: uppercase;
+  }
+  .notification-copy {
+    max-width: 28rem;
+    margin-top: 0.55rem;
+    color: var(--color-muted-foreground);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+  .notification-targets {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+    width: min(100%, 42rem);
+    margin-top: 1.2rem;
+  }
+  .notification-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    min-width: 0;
+    padding: 0.55rem 0.4rem;
+    border: 1px solid oklch(0.45 0.12 220 / 32%);
+    border-radius: 0.15rem;
+    background: oklch(0.1 0.04 255 / 55%);
+    color: inherit;
+    text-align: center;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      transform 180ms ease;
+    animation: notification-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .notification-entry:nth-child(2) {
+    animation-delay: 120ms;
+  }
+  .notification-entry:nth-child(3) {
+    animation-delay: 240ms;
+  }
+  .notification-entry::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 25%,
+      oklch(0.75 0.15 220 / 8%),
+      transparent 75%
+    );
+    content: "";
+    pointer-events: none;
+    transform: translateX(-100%);
+    transition: transform 500ms ease;
+  }
+  .notification-entry:hover {
+    border-color: oklch(0.7 0.18 220 / 60%);
+    background: oklch(0.14 0.06 250 / 72%);
+    transform: translateY(-2px);
+  }
+  .notification-entry:hover::after {
+    transform: translateX(100%);
+  }
+  .notification-rank {
+    display: grid;
+    width: 1.9rem;
+    height: 1.9rem;
+    place-items: center;
+    border: 1px solid currentColor;
+    border-radius: 0.15rem;
+    background: oklch(0.08 0.04 255 / 75%);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 900;
+    box-shadow: inset 0 0 18px currentColor;
+  }
+  .notification-target-info {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+  }
+  .notification-target-name {
+    color: oklch(0.96 0.02 220);
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 0.75rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .notification-target-title {
+    font-family: var(--font-display);
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 0.48rem;
+    letter-spacing: 0.08em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .notification-arrow {
+    display: none;
+  }
+  .notification-entry:hover .notification-arrow {
+    opacity: 1;
+    transform: translateX(0.25rem);
   }
   .stat-bar-track {
-    background: oklch(0.20 0.05 260);
+    background: oklch(0.2 0.05 260);
     box-shadow: inset 0 1px 3px oklch(0.05 0.02 260 / 80%);
   }
   .stat-bar-fill {
-    background: linear-gradient(90deg, oklch(0.45 0.20 240), oklch(0.80 0.14 220));
-    box-shadow: 0 0 10px oklch(0.60 0.18 240 / 70%);
+    background: linear-gradient(90deg, oklch(0.45 0.2 240), oklch(0.8 0.14 220));
+    box-shadow: 0 0 10px oklch(0.6 0.18 240 / 70%);
     transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .rune-divider {
@@ -135,17 +491,87 @@
 }
 
 @keyframes float-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.85; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes notification-in {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.animate-float-up { animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.animate-pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
+@media (max-width: 640px) {
+  .notification-shell {
+    padding: 1.5rem 0;
+  }
+  .system-notification {
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+  .profile-shell {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .profile-window,
+  .profile-stats {
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+  .notification-frame {
+    min-height: 18rem;
+    padding-right: 0.7rem;
+    padding-left: 0.7rem;
+  }
+  .notification-rail {
+    min-height: 3rem;
+  }
+  .notification-content {
+    padding-top: 1rem;
+  }
+  .notification-title {
+    font-size: 1.25rem;
+  }
+}
+
+.animate-float-up {
+  animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notification-entry,
+  .animate-float-up,
+  .animate-pulse-glow {
+    animation: none;
+  }
+}
