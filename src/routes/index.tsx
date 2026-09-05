@@ -180,7 +180,7 @@ async function analyze(username: string): Promise<HunterStats> {
 
   const totalWeight = METRIC_DEFS.reduce((s, d) => s + d.weight, 0);
   const overall = Math.round(
-    METRIC_DEFS.reduce((s, d, i) => s + metrics[i].score * d.weight, 0) / totalWeight,
+    metrics.reduce((s, m, i) => s + m.score * (METRIC_DEFS[i]?.weight ?? 1), 0) / totalWeight,
   );
 
   const rank = rankFor(overall);
