@@ -1,40 +1,87 @@
-# GitHub Ranker
+# GitRank
 
-build a website where when we enter any github real username and shows the score and a final rank like S or A - E like solo levelling anime use that animes theme little and for score and rank generation use the details in image i have provided but dont copy the exact design and extract real data from github username like Commits3.1k commits99
+GitRank turns a public GitHub profile into a Solo Leveling-inspired engineer rank. Enter a GitHub username and the app reads their public activity, calculates a weighted power score, and presents a rank from **E** to **S**.
 
-Stars earned2.1k stars62
+<p align="center">
+	<img src="public/background.webp" alt="GitRank's dark fantasy system interface background" width="900" />
+</p>
 
-Top repo reach1.7k stars62
+## What It Does
 
-Pull requests101 PRs60
+1. Enter any public GitHub username.
+2. GitRank fetches profile, repository, commit, issue, pull request, and review data from GitHub's public API.
+3. The System displays the engineer's profile, overall level, rank title, and metric breakdown.
+4. Each metric receives a score from 0 to 99 and is shown with a progress bar.
 
-Followers284 followers49
+The interface uses a dark system-window aesthetic, animated loading and result states, rank-specific colors, and quick reference profiles for trying the experience immediately.
 
-Languages13 languages94
+## Metrics
 
-Issues29 issues46
+| Metric | What GitRank measures |
+| --- | --- |
+| Commits | Commits attributed to the user through GitHub search |
+| Stars Earned | Total stars on the user's non-fork repositories |
+| Top Repo Reach | Stars on the user's most-starred non-fork repository |
+| Pull Requests | Pull requests authored by the user |
+| Followers | Public GitHub followers |
+| Languages | Distinct primary languages across fetched repositories |
+| Issues | Issues authored by the user |
+| Code Reviews | Pull requests reviewed by the user |
+| Contributions | The combined total of commits, pull requests, issues, and reviews |
 
-Code reviews60 reviews54
+Scores are log-scaled against reference maximums so that a few very large profiles do not make ordinary differences invisible. The weighted average maps to a rank:
 
-Contributions3.9k contributions76 and show that also in the web page .
+| Rank | Overall score | Title |
+| --- | ---: | --- |
+| S | 85-99 | National Level Engineer |
+| A | 68-84 | Elite Engineer |
+| B | 52-67 | High Engineer |
+| C | 38-51 | Proven Engineer |
+| D | 22-37 | Rising Engineer |
+| E | 0-21 | Weakest Engineer |
 
-This project was built with [Lovable](https://lovable.dev).
+## Interface Preview
 
-## Build with Lovable
+The live page combines the visual system backdrop with profile status and scouting metrics after an analysis:
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/43d7ae3b-27d4-416e-80c7-e8795fb9c075).
+<p align="center">
+	<img src="src/assets/dungeon-bg.jpg" alt="GitRank fantasy-themed visual asset" width="700" />
+</p>
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## Run Locally
 
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requirements: Node.js and npm.
 
 ```sh
 git clone <this-repository-url>
-cd <repository-name>
-npm i
+cd github-ranker
+npm install
 npm run dev
 ```
+
+Open the local URL printed by Vite, usually `http://localhost:5173`.
+
+## Scripts
+
+```sh
+npm run dev       # Start the Vite development server
+npm run build     # Create a production build
+npm run preview   # Serve the production build locally
+npm run lint      # Run ESLint
+npm run format    # Format the project with Prettier
+```
+
+## Notes
+
+- GitRank only uses publicly available GitHub data; no GitHub sign-in is required.
+- GitHub API rate limits can affect searches, especially for repeated evaluations.
+- Repository analysis is limited to the repositories returned by the public API request.
+- The score is an entertaining comparison, not a measure of engineering quality or hiring suitability.
+
+## Tech Stack
+
+- React 19 and TypeScript
+- TanStack Start and TanStack Router
+- Vite
+- Tailwind CSS
+- GitHub REST API
