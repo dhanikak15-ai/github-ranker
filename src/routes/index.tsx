@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import dungeonBg from "@/assets/dungeon-bg.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -230,11 +229,11 @@ function Index() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <img
-        src={dungeonBg}
+        src="/background.webp"
         alt=""
         width={1920}
         height={1080}
-        className="pointer-events-none fixed inset-0 h-full w-full object-cover opacity-40"
+        className="pointer-events-none fixed inset-0 h-full w-full object-cover opacity-70"
       />
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
 
