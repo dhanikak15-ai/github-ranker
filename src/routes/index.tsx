@@ -5,17 +5,17 @@ import dungeonBg from "@/assets/dungeon-bg.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "GitRank — Awaken Your GitHub Hunter Rank" },
+      { title: "GitRank — Awaken Your GitHub Engineer Rank" },
       {
         name: "description",
         content:
-          "Enter any GitHub username and the System will analyze their commits, stars, PRs and more to reveal a Solo Leveling style hunter rank from E to S.",
+          "Enter any GitHub username and the System will analyze their commits, stars, PRs and more to reveal a Solo Leveling style engineer rank from E to S.",
       },
-      { property: "og:title", content: "GitRank — Awaken Your GitHub Hunter Rank" },
+      { property: "og:title", content: "GitRank — Awaken Your GitHub Engineer Rank" },
       {
         property: "og:description",
         content:
-          "Enter any GitHub username and reveal their hunter rank — from E to S — based on real GitHub stats.",
+          "Enter any GitHub username and reveal their engineer rank — from E to S — based on real GitHub stats.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -246,7 +246,7 @@ function Index() {
           </p>
           <h1 className="font-display mana-text mt-4 text-5xl font-bold sm:text-7xl">GITRANK</h1>
           <p className="mt-3 max-w-md text-lg text-muted-foreground">
-            Enter a GitHub username. The System will measure their power and assign a hunter rank —{" "}
+            Enter a GitHub username. The System will measure their power and assign an engineer rank —{" "}
             <span className="text-rank-e font-semibold">E</span> to{" "}
             <span className="text-rank-s font-semibold">S</span>.
           </p>
@@ -276,7 +276,7 @@ function Index() {
         {loading && (
           <div className="system-window animate-float-up mt-10 w-full max-w-xl rounded-xl px-8 py-10 text-center">
             <p className="font-display animate-pulse-glow text-lg tracking-[0.3em] text-mana uppercase">
-              Analyzing Hunter…
+              Analyzing Engineer…
             </p>
             <div className="stat-bar-track mx-auto mt-6 h-2 w-64 overflow-hidden rounded-full">
               <div className="stat-bar-fill h-full w-2/3 animate-pulse" />
@@ -306,7 +306,7 @@ function HunterSheet({ hunter }: { hunter: HunterStats }) {
       <section className="system-window overflow-hidden rounded-2xl">
         <div className="system-header px-6 py-3 text-center">
           <span className="font-display text-xs font-bold tracking-[0.4em] text-mana uppercase">
-            — Hunter Status Window —
+            — Engineer Status Window —
           </span>
         </div>
         <div className="flex flex-col items-center gap-8 p-8 sm:flex-row sm:p-10">
@@ -342,7 +342,7 @@ function HunterSheet({ hunter }: { hunter: HunterStats }) {
             </span>
             <div className="rune-divider my-3 w-24" />
             <span className="text-3xl font-bold text-foreground">{hunter.overall}</span>
-            <span className="text-xs tracking-widest text-muted-foreground uppercase">Power Level</span>
+            <span className="text-xs tracking-widest text-muted-foreground uppercase">Level</span>
             <span className={`mt-2 text-sm font-semibold ${meta.colorClass}`}>{hunter.title}</span>
           </div>
         </div>
