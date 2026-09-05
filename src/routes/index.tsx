@@ -26,7 +26,7 @@ export const Route = createFileRoute("/")({
 
 /* ---------------- Types ---------------- */
 
-interface HunterStats {
+interface EngineerStats {
   username: string;
   name: string | null;
   avatar: string;
@@ -79,32 +79,32 @@ function rankFor(overall: number): Rank {
 
 const RANK_META: Record<Rank, { title: string; colorClass: string; desc: string }> = {
   S: {
-    title: "National Level Hunter",
+    title: "National Level Engineer",
     colorClass: "text-rank-s",
     desc: "A monarch among developers. Nations speak their name.",
   },
   A: {
-    title: "Elite Hunter",
+    title: "Elite Engineer",
     colorClass: "text-rank-a",
     desc: "Guilds wage wars to recruit talent like this.",
   },
   B: {
-    title: "High Hunter",
+    title: "High Engineer",
     colorClass: "text-rank-b",
     desc: "A trusted raid leader. Few dungeons can stop them.",
   },
   C: {
-    title: "Proven Hunter",
+    title: "Proven Engineer",
     colorClass: "text-rank-c",
     desc: "Steady and reliable — the backbone of every party.",
   },
   D: {
-    title: "Rising Hunter",
+    title: "Rising Engineer",
     colorClass: "text-rank-d",
     desc: "Awakened and climbing. The gates have noticed.",
   },
   E: {
-    title: "Weakest Hunter",
+    title: "Weakest Engineer",
     colorClass: "text-rank-e",
     desc: "Every monarch started at E-rank. Keep grinding.",
   },
@@ -116,7 +116,7 @@ async function gh<T>(path: string): Promise<T> {
   const res = await fetch(`https://api.github.com${path}`, {
     headers: { Accept: "application/vnd.github+json" },
   });
-  if (res.status === 404) throw new Error("Hunter not found in this realm.");
+  if (res.status === 404) throw new Error("Engineer not found in this realm.");
   if (res.status === 403) throw new Error("The System is rate-limited. Try again in a minute.");
   if (!res.ok) throw new Error(`GitHub answered with ${res.status}.`);
   return (await res.json()) as T;
@@ -141,7 +141,7 @@ interface GhSearch {
   total_count: number;
 }
 
-async function analyze(username: string): Promise<HunterStats> {
+async function analyze(username: string): Promise<EngineerStats> {
   const user = await gh<GhUser>(`/users/${encodeURIComponent(username)}`);
 
   const [repos, commits, prs, issues, reviews] = await Promise.all([
@@ -209,7 +209,7 @@ function Index() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hunter, setHunter] = useState<HunterStats | null>(null);
+  const [engineer, setEngineer] = useState<EngineerStats | null>(null);
 
   const summon = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -217,9 +217,9 @@ function Index() {
     if (!username) return;
     setLoading(true);
     setError(null);
-    setHunter(null);
+    setEngineer(null);
     try {
-      setHunter(await analyze(username));
+      setEngineer(await analyze(username));
     } catch (err) {
       setError(err instanceof Error ? err.message : "The System failed to answer.");
     } finally {
@@ -291,14 +291,14 @@ function Index() {
           </div>
         )}
 
-        {hunter && !loading && <HunterSheet hunter={hunter} />}
+        {engineer && !loading && <EngineerSheet engineer={engineer} />}
       </main>
     </div>
   );
 }
 
-function HunterSheet({ hunter }: { hunter: HunterStats }) {
-  const meta = RANK_META[hunter.rank];
+function EngineerSheet({ engineer }: { engineer: EngineerStats }) {
+  const meta = RANK_META[engineer.rank];
 
   return (
     <div className="animate-float-up mt-12 w-full">
@@ -313,8 +313,8 @@ function HunterSheet({ hunter }: { hunter: HunterStats }) {
           <div className="relative shrink-0">
             <div className="absolute -inset-3 rounded-full bg-mana/20 blur-2xl" />
             <img
-              src={hunter.avatar}
-              alt={`${hunter.username}'s avatar`}
+              src={engineer.avatar}
+              alt={`${engineer.username}'s avatar`}
               width={140}
               height={140}
               className="relative h-32 w-32 rounded-full border-2 border-mana/60 object-cover shadow-[0_0_30px_var(--color-mana-glow)]"
@@ -324,26 +324,26 @@ function HunterSheet({ hunter }: { hunter: HunterStats }) {
           <div className="flex-1 text-center sm:text-left">
             <p className="font-display text-xs tracking-[0.35em] text-muted-foreground uppercase">Name</p>
             <h2 className="mt-1 text-3xl font-bold tracking-wide text-foreground sm:text-4xl">
-              {hunter.name ?? hunter.username}
+              {engineer.name ?? engineer.username}
             </h2>
-            <p className="text-mana text-lg font-semibold">@{hunter.username}</p>
-            {hunter.bio && <p className="mt-2 max-w-md text-muted-foreground">{hunter.bio}</p>}
+            <p className="text-mana text-lg font-semibold">@{engineer.username}</p>
+            {engineer.bio && <p className="mt-2 max-w-md text-muted-foreground">{engineer.bio}</p>}
             <p className="mt-3 text-sm text-muted-foreground">
-              {hunter.publicRepos} public repositories · {meta.desc}
+              {engineer.publicRepos} public repositories · {meta.desc}
             </p>
           </div>
 
           <div className="flex flex-col items-center">
             <span className={`font-display rank-glow text-[7rem] leading-none font-black ${meta.colorClass}`}>
-              {hunter.rank}
+              {engineer.rank}
             </span>
             <span className="font-display mt-1 text-xs tracking-[0.3em] text-muted-foreground uppercase">
               Rank
             </span>
             <div className="rune-divider my-3 w-24" />
-            <span className="text-3xl font-bold text-foreground">{hunter.overall}</span>
+            <span className="text-3xl font-bold text-foreground">{engineer.overall}</span>
             <span className="text-xs tracking-widest text-muted-foreground uppercase">Level</span>
-            <span className={`mt-2 text-sm font-semibold ${meta.colorClass}`}>{hunter.title}</span>
+            <span className={`mt-2 text-sm font-semibold ${meta.colorClass}`}>{engineer.title}</span>
           </div>
         </div>
       </section>
@@ -354,7 +354,7 @@ function HunterSheet({ hunter }: { hunter: HunterStats }) {
           — Scouting Metrics —
         </h3>
         <div className="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2">
-          {hunter.metrics.map((m, i) => (
+          {engineer.metrics.map((m, i) => (
             <div key={m.key} className="animate-float-up" style={{ animationDelay: `${i * 60}ms` }}>
               <div className="flex items-baseline justify-between gap-2">
                 <span className="font-semibold tracking-wide text-foreground">{m.label}</span>
@@ -370,7 +370,7 @@ function HunterSheet({ hunter }: { hunter: HunterStats }) {
           ))}
         </div>
         <p className="mt-8 text-center text-xs text-muted-foreground/70">
-          Scores are measured by the System from public GitHub activity and scaled against legendary hunters.
+          Scores are measured by the System from public GitHub activity and scaled against legendary engineers.
         </p>
       </section>
     </div>
