@@ -370,7 +370,7 @@ function EngineerSheet({ engineer }: { engineer: EngineerStats }) {
           ))}
         </div>
         <p className="mt-8 text-center text-xs text-muted-foreground/70">
-          Scores are measured by the System from public GitHub activity and scaled against legendary hunters.
+          Scores are measured by the System from public GitHub activity and scaled against legendary engineers.
         </p>
       </section>
     </div>
