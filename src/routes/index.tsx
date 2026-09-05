@@ -79,32 +79,32 @@ function rankFor(overall: number): Rank {
 
 const RANK_META: Record<Rank, { title: string; colorClass: string; desc: string }> = {
   S: {
-    title: "National Level Hunter",
+    title: "National Level Engineer",
     colorClass: "text-rank-s",
     desc: "A monarch among developers. Nations speak their name.",
   },
   A: {
-    title: "Elite Hunter",
+    title: "Elite Engineer",
     colorClass: "text-rank-a",
     desc: "Guilds wage wars to recruit talent like this.",
   },
   B: {
-    title: "High Hunter",
+    title: "High Engineer",
     colorClass: "text-rank-b",
     desc: "A trusted raid leader. Few dungeons can stop them.",
   },
   C: {
-    title: "Proven Hunter",
+    title: "Proven Engineer",
     colorClass: "text-rank-c",
     desc: "Steady and reliable — the backbone of every party.",
   },
   D: {
-    title: "Rising Hunter",
+    title: "Rising Engineer",
     colorClass: "text-rank-d",
     desc: "Awakened and climbing. The gates have noticed.",
   },
   E: {
-    title: "Weakest Hunter",
+    title: "Weakest Engineer",
     colorClass: "text-rank-e",
     desc: "Every monarch started at E-rank. Keep grinding.",
   },
@@ -116,7 +116,7 @@ async function gh<T>(path: string): Promise<T> {
   const res = await fetch(`https://api.github.com${path}`, {
     headers: { Accept: "application/vnd.github+json" },
   });
-  if (res.status === 404) throw new Error("Hunter not found in this realm.");
+  if (res.status === 404) throw new Error("Engineer not found in this realm.");
   if (res.status === 403) throw new Error("The System is rate-limited. Try again in a minute.");
   if (!res.ok) throw new Error(`GitHub answered with ${res.status}.`);
   return (await res.json()) as T;
